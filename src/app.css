@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .card {
+        @apply border border-2 border-solid ring-1 ring-teal-500 shadow-lg shadow-teal-500/75 rounded-lg;
+    }
+}
+
+@layer base {
+    h1 {
+        @apply font-title text-2xl;
+    }
+
+    h2 {
+        @apply font-title text-xl;
+    }
+}
