@@ -21,9 +21,14 @@
             description: 'Quickly create and manage Metaplex Candymachines and NFTs in Solana from your browser'
         },
         {
-            name: 'Klinikare',
-            url: 'https://app.klinikare.com',
-            description: 'KliniKare is specialized in the development of software for the comprehensive management of universities, clinics and laboratories.'
+            name: 'Boxfish Website',
+            url: 'https://boxfish.studio/',
+            description: 'Top-quality solutions for emerging industries and technologies.'
+        },
+        {
+            name: 'Shimmer',
+            url: 'https://shimmer.network/',
+            description: 'Shimmer  is a feeless, parallelized DAG ledger to secure and create fully customizable smart contract chains.'
         },
         {
             name: 'Assembly',
@@ -36,14 +41,9 @@
             description: 'A lightweight wallet for sending and receiving your IOTA assets on the go. Highly secure and easy to use, with mobile-specific functionality.'
         },
         {
-            name: 'Boxfish Website',
-            url: 'https://boxfish.studio/',
-            description: 'Top-quality solutions for emerging industries and technologies.'
-        },
-        {
-            name: 'Shimmer',
-            url: 'https://shimmer.network/',
-            description: 'Shimmer  is a feeless, parallelized DAG ledger to secure and create fully customizable smart contract chains.'
+            name: 'Iota Library',
+            url: 'https://assets.iota.org/',
+            description: 'All assets of IOTA of the asset library are free to use, rehash, redesign.'
         },
         {
             name: 'Iota Roadmap',
@@ -51,9 +51,14 @@
             description: 'Interactive Roadmap of IOTA Research and Development.'
         },
         {
-            name: 'Iota Library',
-            url: 'https://assets.iota.org/',
-            description: 'All assets of IOTA of the asset library are free to use, rehash, redesign.'
+            name: 'Klinikare',
+            url: 'https://app.klinikare.com',
+            description: 'KliniKare is specialized in the development of software for the comprehensive management of universities, clinics and laboratories.'
+        },
+        {
+            name: 'Gestiona',
+            url: 'http://www.gestiondeclinica.es/',
+            description: 'Gestiona by Klinikare is specialized in the development of software for the integral management of all types of clinics.'
         },
     ]
         
@@ -66,7 +71,7 @@
             <Card {...repo} />
         {/each}
     </div>
-    <h1 class="font-bold py-4">My Projects</h1>
+    <h1 class="font-bold py-4">Own Projects</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {#each data?.projects as repo}
             <Card {...repo} />

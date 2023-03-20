@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { fly } from "svelte/transition";
+	import { modeStore } from '$lib';
 
-    export let title: string = "";
-    export let summary: string = "";
+    export let title: string;
+    export let summary: string;
+    export let technologies: string[];
     let isOpen = false;
   
     function toggleOpen() {
@@ -18,6 +20,11 @@
     {#if isOpen}
       <div class="p-4" transition:fly="{{ y: -20, duration: 400 }}" >
         {summary}
+        <div class="flex flex-wrap space-x-2 mt-4">
+          {#each technologies as technology}
+            <span class={`${$modeStore === 'dark' ? 'bg-teal-600' : 'bg-teal-400' } border rounded-xl p-2`}>{technology}</span>
+          {/each}
+        </div>
       </div>
     {/if}
   </div>
