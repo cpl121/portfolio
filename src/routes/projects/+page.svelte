@@ -65,6 +65,7 @@
 </script>
 
 <div class="flex flex-col space-y-4">
+    <h1 class="text-5xl underline">Projects</h1>
     <h1 class="font-bold py-4">My contributions</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {#each COLLABORATIONS_PROJECTS as repo}

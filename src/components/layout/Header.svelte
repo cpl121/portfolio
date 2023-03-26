@@ -1,57 +1,125 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { NavbarIcon } from '$components';
 	import { GITHUB_CPL121_URL, toggleMode, modeStore } from '$lib';
-	import { github, twitter, instagram, linkedin, dark, light } from '$lib/images';
+	import { Github, Twitter, Instagram, Linkedin, Dark, Light } from '$lib/images';
+
+	const ITEMS = [
+		{
+			title: 'Home',
+			url: '/'
+		},
+		{
+			title: 'Projects',
+			url: '/projects'
+		},
+		{
+			title: 'About me',
+			url: '/about'
+		}
+	];
+
+	const SOCIAL_MEDIA = [
+		{
+			title: 'GitHub',
+			url: GITHUB_CPL121_URL,
+			logo: Github
+		},
+		{
+			title: 'Twitter',
+			url: 'https://twitter.com/CPL_Developer',
+			logo: Twitter
+		},
+		{
+			title: 'Instagram',
+			url: 'https://instagram.com/cesitarpl121',
+			logo: Instagram
+		},
+		{
+			title: 'Linkedin',
+			url: 'https://linkedin.com/in/c%C3%A9sar-pe%C3%B3n-lamparero',
+			logo: Linkedin
+		}
+	];
+
+	let open: boolean = false
+	function handleMenu() {
+		open = !open
+		if (open) {
+			document.body.classList.add("no-scroll");
+		} else {
+			document.body.classList.remove("no-scroll");
+		}
+	}
+	
+	function goToUrl(url: string) {
+		open = false
+		goto(url)
+	}
+
 </script>
 
 <header>
-	<nav>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/projects' ? 'page' : undefined}>
-				<a href="/projects">My projects</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About me</a>
-			</li>
-		</ul>
-	</nav>
-
-	<div class="corner">
-		<a href={GITHUB_CPL121_URL} target="_blank" rel="noopener noreferrer">
-			<img data-mode={$modeStore} src={github} alt="GitHub" />
-		</a>
-		<a href='https://twitter.com/CPL_Developer' target="_blank" rel="noopener noreferrer">
-			<img data-mode={$modeStore} src={twitter} alt="Twitter" />
-		</a>
-		<a href='https://instagram.com/cesitarpl121' target="_blank" rel="noopener noreferrer">
-			<img data-mode={$modeStore} src={instagram} alt="Instagram" />
-		</a>
-		<a href='https://linkedin.com/in/c%C3%A9sar-pe%C3%B3n-lamparero' target="_blank" rel="noopener noreferrer">
-			<img data-mode={$modeStore} src={linkedin} alt="Linkedin" />
-		</a>
-		<button on:click={toggleMode}>
-			{#if $modeStore === 'dark'}
-				<img data-mode={$modeStore} src={dark} alt="Dark mode" />
-			{:else if $modeStore === 'light'}
-				<img data-mode={$modeStore} src={light} alt="Light mode" />
-			{/if}
-		</button>
+	<div class="md:hidden ml-4 mt-4 flex justify-center items-center">
+		<NavbarIcon bind:open onClick={handleMenu} />
 	</div>
+	<div class="flex justify-around invisible md:visible">
+		<nav hidden>
+			<ul>
+				{#each ITEMS as item} 
+					<li aria-current={$page.url.pathname === item.url ? 'page' : undefined}>
+						<a href={item.url}>{item.title}</a>
+					</li>
+				{/each}
+			</ul>
+		</nav>
+
+		<div class="corner">
+			{#each SOCIAL_MEDIA as media}
+				<a class="corner-links" href={media.url} target="_blank" rel="noopener noreferrer">
+					<img data-mode={$modeStore} src={media.logo} alt={media.title} />
+				</a>
+			{/each}
+			<button class="corner-links" on:click={toggleMode}>
+				{#if $modeStore === 'dark'}
+					<img data-mode={$modeStore} src={Dark} alt="Dark mode" />
+				{:else if $modeStore === 'light'}
+					<img data-mode={$modeStore} src={Light} alt="Light mode" />
+				{/if}
+			</button>
+		</div>
+	</div>
+	{#if open}
+		<div class="md:hidden w-screen h-screen absolute left-0 top-0 z-10">
+			<div class="flex flex-col justify-start space-y-20 h-full pt-32 backdrop-blur-xl">
+				<div class="flex flex-col justify-start items-center space-y-4">
+					{#each ITEMS as { title, url }}
+						{#if title && url}
+							<button class={`${$page.url.pathname === url ? 'border-b-2 border-teal-400' : ''} font-bold text-3xl`} on:click={() => goToUrl(url)}>{title}</button>
+						{/if}
+					{/each}
+				</div>
+				<div class="flex flex-col justify-start items-center space-y-4">
+					{#each SOCIAL_MEDIA as { title, url }}
+						{#if title && url}
+							<a class="text-xl" href={url} target="_blank" rel="noopener noreferrer">{title}</a>
+						{/if}
+					{/each}
+				</div>
+				<button on:click={toggleMode}>{$modeStore === 'dark' ? 'Light' : 'Dark'} Mode</button>
+			</div>
+		</div>
+	{/if}
 </header>
 
+
 <style lang='scss'>
-	header {
-		@apply flex justify-around;
-	}
-
 	.corner {
-		@apply flex flex-row items-center w-[15%];
+		@apply flex flex-row items-center w-[13%];
 	}
 
-	.corner a, button {
+	.corner-links {
 		@apply flex items-center justify-center;
 		@apply w-full h-full
 	}
@@ -80,7 +148,7 @@
 	}
 
 	li {
-		@apply relative h-full;
+		@apply relative h-full list-none;
 	}
 
 	li[aria-current='page']::before {
