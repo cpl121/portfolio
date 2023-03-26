@@ -1,11 +1,14 @@
 <script>
-	import { GITHUB_CPL121_URL } from "$lib";
+	import { GITHUB_CPL121_URL } from '$lib';
 	import { modeStore } from '$lib';
-
 </script>
 
 <footer data-mode={$modeStore}>
-	<span>Developed by <a class="link" href={GITHUB_CPL121_URL} target="_blank" rel="noopener noreferrer">cpl121</a></span>
+	<span
+		>Developed by <a class="link" href={GITHUB_CPL121_URL} target="_blank" rel="noopener noreferrer"
+			>cpl121</a
+		></span
+	>
 </footer>
 
 <style lang="scss">
@@ -27,5 +30,4 @@
 	.link:hover {
 		@apply text-teal-400 underline;
 	}
-
 </style>

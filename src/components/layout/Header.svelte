@@ -43,22 +43,21 @@
 		}
 	];
 
-	let open: boolean = false
+	let open = false;
 	function handleMenu() {
-		open = !open
+		open = !open;
 		if (open) {
-			document.body.classList.add("no-scroll");
+			document.body.classList.add('no-scroll');
 		} else {
-			document.body.classList.remove("no-scroll");
+			document.body.classList.remove('no-scroll');
 		}
 	}
-	
-	function goToUrl(url: string) {
-		open = false
-		document.body.classList.remove("no-scroll");
-		goto(url)
-	}
 
+	function goToUrl(url: string) {
+		open = false;
+		document.body.classList.remove('no-scroll');
+		goto(url);
+	}
 </script>
 
 <header>
@@ -68,7 +67,7 @@
 	<div class="flex justify-around invisible md:visible">
 		<nav hidden>
 			<ul>
-				{#each ITEMS as item} 
+				{#each ITEMS as item}
 					<li aria-current={$page.url.pathname === item.url ? 'page' : undefined}>
 						<a href={item.url}>{item.title}</a>
 					</li>
@@ -97,7 +96,12 @@
 				<div class="flex flex-col justify-start items-center space-y-4">
 					{#each ITEMS as { title, url }}
 						{#if title && url}
-							<button class={`${$page.url.pathname === url ? 'border-b-2 border-teal-400' : ''} font-bold text-3xl`} on:click={() => goToUrl(url)}>{title}</button>
+							<button
+								class={`${
+									$page.url.pathname === url ? 'border-b-2 border-teal-400' : ''
+								} font-bold text-3xl`}
+								on:click={() => goToUrl(url)}>{title}</button
+							>
 						{/if}
 					{/each}
 				</div>
@@ -114,15 +118,14 @@
 	{/if}
 </header>
 
-
-<style lang='scss'>
+<style lang="scss">
 	.corner {
 		@apply flex flex-row items-center w-[13%];
 	}
 
 	.corner-links {
 		@apply flex items-center justify-center;
-		@apply w-full h-full
+		@apply w-full h-full;
 	}
 
 	.corner img {
@@ -168,7 +171,7 @@
 
 	nav a {
 		@apply flex items-center h-full px-2;
-		@apply font-bold text-xs uppercase ;
+		@apply font-bold text-xs uppercase;
 		@apply tracking-widest no-underline;
 	}
 </style>

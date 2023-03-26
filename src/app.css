@@ -3,23 +3,23 @@
 @tailwind utilities;
 
 @layer components {
-    .card {
-        @apply border-2 border-solid ring-1 ring-teal-500 rounded-lg shadow-md shadow-teal-500/75;
-    }
-    .card:hover {
-        @apply shadow-xl shadow-teal-500/75;
-    }
-    .no-scroll {
+	.card {
+		@apply border-2 border-solid ring-1 ring-teal-500 rounded-lg shadow-md shadow-teal-500/75;
+	}
+	.card:hover {
+		@apply shadow-xl shadow-teal-500/75;
+	}
+	.no-scroll {
 		@apply overflow-hidden;
 	}
 }
 
 @layer base {
-    h1 {
-        @apply font-title text-2xl;
-    }
+	h1 {
+		@apply font-title text-2xl;
+	}
 
-    h2 {
-        @apply font-title text-xl;
-    }
+	h2 {
+		@apply font-title text-xl;
+	}
 }

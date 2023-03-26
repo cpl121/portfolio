@@ -29,5 +29,4 @@
 	[data-mode='light'] {
 		@apply bg-slate-200  text-zinc-800;
 	}
-
 </style>
