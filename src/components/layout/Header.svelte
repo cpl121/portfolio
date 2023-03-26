@@ -55,6 +55,7 @@
 	
 	function goToUrl(url: string) {
 		open = false
+		document.body.classList.remove("no-scroll");
 		goto(url)
 	}
 
