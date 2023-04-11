@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit(), mdPlugin({ mode: [Mode.HTML] })],
+	base: '',
 	css: {
 		preprocessorOptions: {
 			scss: {
