@@ -9,7 +9,11 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-			strict: false
+			pages: 'build',
+			assets: 'build',
+			fallback: null,
+			precompress: false,
+			strict: true
 		}),
 		alias: {
 			$components: 'src/components',
