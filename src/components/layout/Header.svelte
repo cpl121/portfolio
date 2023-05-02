@@ -28,7 +28,7 @@
 		},
 		{
 			title: 'Twitter',
-			url: 'https://twitter.com/CPL_Developer',
+			url: 'https://twitter.com/CPL121_',
 			logo: Twitter
 		},
 		{
