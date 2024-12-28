@@ -27,6 +27,6 @@ The decentralized web represents freedom, innovation, and endless possibilities.
 ---
 
 ## 📫 Let's Connect!
-- **Web:** `[cpl121.eth](https://cpl121.eth.limo)`
+- **Web:** [cpl121.eth](https://cpl121.eth.limo)
 - **GitHub:** [github.com/cpl121](https://github.com/cpl121)
 - **Twitter:** [@cpl121_](https://x.com/cpl121_)
