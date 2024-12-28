@@ -1,38 +1,32 @@
-# create-svelte
+# cpl121.eth - Web3 Fullstack Developer
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Hi! I'm a **Web3 Fullstack Developer** with a passion for building innovative decentralized applications and blockchain solutions. Currently, Im working with **IOTA**, exploring cutting-edge technologies for scalable and secure systems. I've also had the opportunity to work on projects with **Polygon** and **Solana** projects, creating seamless dApps and smart contracts.
 
-## Creating a project
+---
 
-If you're seeing this, you've probably already done this step. Congrats!
+## 🌟 Why Web3?
+The decentralized web represents freedom, innovation, and endless possibilities. I’m driven by the challenge of solving complex problems, enhancing user experiences, and contributing to the evolution of blockchain technology.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+---
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## 🛠️ Projects & Highlights
+- **Wallet Development:** Built and optimized wallets with Ledger integration for secure and user-friendly asset management.
+- **Blockchain Explorers:** Designed and developed explorers to visualize on-chain data and analytics.
+- **Ledger-integrated dApp:** Built a decentralized application with seamless wallet integration for secure transactions.
+- **Cross-chain Solutions:** Worked on bridging assets.
+- **Protocol Development:** Contributed to scaling efforts and smart contract standards on IOTA.
 
-## Developing
+---
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 💻 Tech Stack
+- **Frontend:** React.js, Next.js, Svelte.js, Tailwind CSS, TypeScript
+- **Backend:** Node.js, GraphQL, REST APIs
+- **Smart Contract:** Solidity, Move
+- **Blockchain:** IOTA, Polygon, Solana
 
-```bash
-npm run dev
+---
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## 📫 Let's Connect!
+- **Web:** `[cpl121.eth](https://cpl121.eth.limo)`
+- **GitHub:** [github.com/cpl121](https://github.com/cpl121)
+- **Twitter:** [@cpl121_](https://x.com/cpl121_)
