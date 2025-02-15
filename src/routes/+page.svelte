@@ -3,8 +3,6 @@
 	import { onMount } from 'svelte';
 	import { Title, Logo } from '$lib/images';
 
-	const TITLE = 'Welcome';
-
 	onMount(() => {
 		printLogs();
 	});
@@ -23,11 +21,10 @@
 			}`}
 		>
 		<img data-mode={$modeStore} src={Logo} alt='Logo' class="h-28 w-28" />
-			<h1 class="title text-center">{TITLE}</h1>
 			<img data-mode={$modeStore} src={Title} alt='Title' class="h-24 w-auto" />
-			<h2 data-text="WEB3XR | FULL-STACK DEVELOPER" class="subtitle">
+			<h1 data-text="WEB3XR | FULL-STACK DEVELOPER" class="subtitle">
 				<mark class="mark">WEB3XR | FULL-STACK DEVELOPER</mark>
-			</h2>
+			</h1>
 		</div>
 	</div>
 </section>
@@ -72,11 +69,6 @@
 		background-size: 0% 0.3em;
 		background-position: 0 80%;
 		background-size: 100% 0.3em;
-	}
-
-	.title {
-		@apply font-home text-7xl tracking-wider;
-		@apply flex flex-row flex-wrap justify-center;
 	}
 
 	@keyframes bounce {
