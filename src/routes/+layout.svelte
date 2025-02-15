@@ -24,9 +24,9 @@
 	}
 
 	[data-mode='dark'] {
-		@apply bg-zinc-800  text-zinc-100;
+		@apply bg-dark  text-zinc-100;
 	}
 	[data-mode='light'] {
-		@apply bg-slate-200  text-zinc-800;
+		@apply bg-slate-200  text-dark;
 	}
 </style>

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { modeStore, printLogs } from '$lib';
 	import { onMount } from 'svelte';
+	import { Title, Logo } from '$lib/images';
 
-	const TITLE = 'Welcome to cpl121 portfolio';
+	const TITLE = 'Welcome';
 
 	onMount(() => {
 		printLogs();
@@ -11,29 +12,22 @@
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Portfolio of cpl121" />
+	<meta name="description" content="CPL121 Portfolio" />
 </svelte:head>
 
-<section class="lg:mt-32">
-	<div class="card borders">
+<section class="lg:mt-32 flex items-center space-y-12">
+	<div class="card borders max-w">
 		<div
-			class={`flex flex-col space-y-20 p-8 md:p-20 ${
+			class={`flex flex-col items-center space-y-8 p-8 md:p-16 ${
 				$modeStore === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'
 			}`}
 		>
-			<div class="title">
-				{#each TITLE.split(' ') as word}
-					<div class="flex flex-row">
-						{#each word.split('') as char}
-							<p class="word" data-text={char}>{char}</p>
-						{/each}
-					</div>
-					<p class="word" data-text="&nbsp;">&nbsp;</p>
-				{/each}
-			</div>
-			<h1 data-text="COMPUTER ENGINEER | FULL-STACK DEVELOPER | WEB 3" class="subtitle">
-				<mark class="mark">COMPUTER ENGINEER | FULL-STACK DEVELOPER | WEB 3</mark>
-			</h1>
+		<img data-mode={$modeStore} src={Logo} alt='Logo' class="h-28 w-28" />
+			<h1 class="title text-center">{TITLE}</h1>
+			<img data-mode={$modeStore} src={Title} alt='Title' class="h-24 w-auto" />
+			<h2 data-text="WEB3XR | FULL-STACK DEVELOPER" class="subtitle">
+				<mark class="mark">WEB3XR | FULL-STACK DEVELOPER</mark>
+			</h2>
 		</div>
 	</div>
 </section>
@@ -45,7 +39,7 @@
 	}
 
 	.borders {
-		@apply m-2 p-2 rounded-lg bg-gradient-to-tl from-teal-300 via-emerald-700 to-teal-500;
+		@apply m-2 p-2 rounded-lg bg-gradient-to-tl from-customTurquoise-100 via-customTurquoise-400 to-customTurquoise-200;
 		/* animation: rotate 10s linear infinite; */
 	}
 
@@ -83,22 +77,6 @@
 	.title {
 		@apply font-home text-7xl tracking-wider;
 		@apply flex flex-row flex-wrap justify-center;
-	}
-
-	.word::before {
-		content: attr(data-text);
-		position: absolute;
-		top: 0;
-		left: 0;
-		color: transparent;
-	}
-
-	.word:hover::before {
-		@apply text-teal-300;
-	}
-
-	.word:hover {
-		animation: bounce 0.5s linear infinite;
 	}
 
 	@keyframes bounce {

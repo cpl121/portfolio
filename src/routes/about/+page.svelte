@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { MarkdownSection } from '$components';
 	import { Expandable } from '$components';
-	import { type IExperience, TECHNOLOGIES, SOCIAL_MEDIA } from '$lib';
+	import { type IExperience, SOCIAL_MEDIA, modeStore } from '$lib';
 
 	const SUMMARY =
 		"Experienced Full-Stack Web Developer currently working at Boxfish Studio, specializing in web3 development using Solana and IOTA blockchains. Proficient in React with Next.js and Svelte with SvelteKit for front-end development, and Node.js for back-end development. Prior to this role, worked at Mnemo and Addentra, delivering high-quality web applications utilizing TDD techniques and Scrum methodology. Skilled in Vue.js, Angular, and Python. Holds a Master's degree in Industry 4.0 from UNIR and a Bachelor's degree in Computer Engineering from the University of Alcalá.";
 	const EXPERIENCES: IExperience[] = [
 		{
-			title: 'Full-Stack Web3 Developer at Boxfish Studio, 18/04/2022 – Currently working',
+			title: 'Sr Web3 Dev',
+			company: 'Boxfish Studio',
+			dates: 'April 2022 – March 2025',
 			summary: `
             <p>Boxfish Studio is a technology company that specializes in developing web3 applications. As a Full-Stack Web3 Developer, my main responsibilities include:</p>
             <ul style="margin: 10px 0 10px 20px; list-style-type: disc;">
@@ -50,7 +51,9 @@
 			]
 		},
 		{
-			title: 'Full-Stack Web Developer at Mnemo, 01/06/2020 – 02/11/2021',
+			title: 'Full-Stack Web Dev',
+			company: 'Mnemo',
+			dates: 'June 2020 – November 2021',
 			summary: `
             <p>Mnemo is a technology consulting company that offers digital transformation services to businesses. As a Full-Stack Web Developer, my main responsibilities included:</p>
             <ul style="margin: 10px 0 10px 20px; list-style-type: disc;">
@@ -82,7 +85,9 @@
 			]
 		},
 		{
-			title: 'Full-Stack Web Developer at Addentra Internet S.L., 03/09/2018 – 13/04/2020',
+			title: 'Jr Full-Stack Web Dev',
+			company: ' Addentra Internet S.L.',
+			dates: 'September 2018 – April 2020',
 			summary: `
             <p>Addentra Internet S.L. is a company specializing in web and mobile application development for dental clinics. As a Full-Stack Web Developer, my main responsibilities included:</p>
             <ul style="margin: 10px 0 10px 20px; list-style-type: disc;">
@@ -127,7 +132,9 @@
 
 	const EDUCATION: IExperience[] = [
 		{
-			title: "Master's degree in Industry 4.0, 2021/2022",
+			title: "Master's degree in Industry 4.0",
+			company: 'UNIR - International University of La Rioja',
+			dates: 'April 2021 – February 2022',
 			summary: `
             <p>UNIR is a private university in Spain that offers a wide range of undergraduate and postgraduate degrees. I studied a Master's degree in Industry 4.0, which is a specialization in the field of Industrial Engineering. During my time at UNIR, I learned about the latest technologies in the field of Industry 4.0, including:</p>
             <ul style="margin: 10px 0 10px 20px; list-style-type: disc;">
@@ -154,7 +161,9 @@
 			]
 		},
 		{
-			title: "Bachelor's degree in Computer Engineering, 2014/2015 – 2018/2019",
+			title: "Bachelor's degree in Computer Engineering",
+			company: 'UAH - University of Alcalá de Henares',
+			dates: 'September 2014 – July 2019',
 			summary: `
             <p>University of Alcalá is a public university in Spain that offers a wide range of undergraduate and postgraduate degrees. I studied a Bachelor's degree in Computer Engineering, which is a specialization in the field of Computer Science. During my time at the University of Alcalá, I learned about the latest technologies in the field of Computer Science, including:</p>
             <ul style="margin: 10px 0 10px 20px; list-style-type: disc;">
@@ -194,19 +203,35 @@
 
 	<div class="flex flex-col space-y-4 my-8">
 		<h1>Work Experience</h1>
-		{#each EXPERIENCES as experience}
-			<Expandable {...experience} />
-		{/each}
+		<div class="flex flex-col space-y-8">
+			{#each EXPERIENCES as experience}
+				<Expandable {...experience} />
+			{/each}
+		</div>
 	</div>
-
-	<MarkdownSection title="Technologies worked" markdown={TECHNOLOGIES} />
 
 	<div class="flex flex-col space-y-4 my-8">
 		<h1>Education</h1>
-		{#each EDUCATION as experience}
-			<Expandable {...experience} />
-		{/each}
+		<div class="flex flex-col space-y-8">
+			{#each EDUCATION as experience}
+				<Expandable {...experience} />
+			{/each}
+		</div>
 	</div>
-
-	<MarkdownSection title="Social media" markdown={SOCIAL_MEDIA} />
+	<div class="flex flex-col space-y-4 my-8">
+		<h1>Contact with Me</h1>
+		<div class="card p-8 flex flex-col space-y-6">
+			<span class="text-semibold">
+				Feel free to reach out! Whether you want to discuss a project, ask a question, or just say
+				hi, I'd love to hear from you.
+			</span>
+			<div class="flex flex-row justify-around items-center">
+				{#each SOCIAL_MEDIA as media}
+					<a href={media.url} target="_blank" rel="noopener noreferrer">
+						<img data-mode={$modeStore} src={media.logo} alt={media.title} class={`h-12 w-auto invert-50 hover:invert-0`} />
+					</a>
+				{/each}
+			</div>
+		</div>
+	</div>
 </section>

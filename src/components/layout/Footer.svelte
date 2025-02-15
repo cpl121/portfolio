@@ -6,7 +6,7 @@
 <footer data-mode={$modeStore}>
 	<span
 		>Developed by <a class="link" href={GITHUB_CPL121_URL} target="_blank" rel="noopener noreferrer"
-			>cpl121</a
+			>cpl121.eth</a
 		></span
 	>
 </footer>
@@ -28,6 +28,6 @@
 	}
 
 	.link:hover {
-		@apply text-teal-400 underline;
+		@apply text-customTurquoise-100 underline;
 	}
 </style>

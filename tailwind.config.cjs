@@ -10,6 +10,16 @@ module.exports = {
 			},
 			invert: {
 				50: '0.5'
+			},
+			colors: {
+				dark: '#303135',
+				ligth: 'bg-slate-200',
+				customTurquoise: {
+					100: '#14ffbc',
+					200: '#18e1a8',
+					300: '#1cc495',
+					400: '#20a682'
+				}
 			}
 		},
 		borderWidth: {

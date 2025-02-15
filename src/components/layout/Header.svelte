@@ -1,45 +1,33 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import { NavbarIcon } from '$components';
-	import { GITHUB_CPL121_URL, toggleMode, modeStore } from '$lib';
-	import { Github, Twitter, Instagram, Linkedin, Dark, Light } from '$lib/images';
+	import { SOCIAL_MEDIA, toggleMode, modeStore } from '$lib';
+	import { Dark } from '$lib/images';
+	import { derived } from 'svelte/store';
+	import { page } from '$app/stores';
 
-	const ITEMS = [
+	// Crear un store derivado para el path actual
+	const currentPath = derived(page, ($page) => $page.url.pathname);
+
+	interface Item {
+		title: string,
+		url: string	}
+
+		
+	const isSelectedPage = (url: string) => $currentPath === url
+
+	const ITEMS: Item[] = [
 		{
 			title: 'Home',
 			url: '/'
 		},
 		{
 			title: 'Projects',
-			url: '/projects'
+			url: '/projects/'
 		},
 		{
 			title: 'About me',
-			url: '/about'
-		}
-	];
-
-	const SOCIAL_MEDIA = [
-		{
-			title: 'GitHub',
-			url: GITHUB_CPL121_URL,
-			logo: Github
-		},
-		{
-			title: 'Twitter',
-			url: 'https://twitter.com/CPL121_',
-			logo: Twitter
-		},
-		{
-			title: 'Instagram',
-			url: 'https://instagram.com/cesitarpl121',
-			logo: Instagram
-		},
-		{
-			title: 'Linkedin',
-			url: 'https://linkedin.com/in/c%C3%A9sar-pe%C3%B3n-lamparero',
-			logo: Linkedin
+			url: '/about/'
 		}
 	];
 
@@ -61,14 +49,14 @@
 </script>
 
 <header>
-	<div class="md:hidden ml-4 mt-4 flex justify-center items-center">
+	<div class="md:hidden mx-4 flex justify-center items-center">
 		<NavbarIcon bind:open onClick={handleMenu} />
 	</div>
 	<div class="flex justify-around invisible md:visible">
 		<nav hidden>
 			<ul>
 				{#each ITEMS as item}
-					<li aria-current={$page.url.pathname === item.url ? 'page' : undefined}>
+					<li aria-current={isSelectedPage(item.url) ? 'page' : undefined}>
 						<a href={item.url}>{item.title}</a>
 					</li>
 				{/each}
@@ -85,7 +73,7 @@
 				{#if $modeStore === 'dark'}
 					<img data-mode={$modeStore} src={Dark} alt="Dark mode" />
 				{:else if $modeStore === 'light'}
-					<img data-mode={$modeStore} src={Light} alt="Light mode" />
+					<img data-mode={$modeStore} src={Dark} alt="Light mode" class="rotate-180" />
 				{/if}
 			</button>
 		</div>
@@ -98,7 +86,7 @@
 						{#if title && url}
 							<button
 								class={`${
-									$page.url.pathname === url ? 'border-b-2 border-teal-400' : ''
+									isSelectedPage(url) ? 'border-b-2 border-customTurquoise-100' : ''
 								} font-bold text-3xl`}
 								on:click={() => goToUrl(url)}>{title}</button
 							>
@@ -120,7 +108,7 @@
 
 <style lang="scss">
 	.corner {
-		@apply flex flex-row items-center w-[13%];
+		@apply flex flex-row items-center w-[17%] space-x-2;
 	}
 
 	.corner-links {
@@ -135,7 +123,7 @@
 	}
 
 	[data-mode='dark']:hover {
-		@apply invert;
+		@apply invert-0;
 	}
 	[data-mode='light']:hover {
 		@apply invert-0;
@@ -166,7 +154,7 @@
 	}
 
 	li[aria-current='page'] {
-		@apply border-b-2 border-teal-400;
+		@apply border-b-2 border-customTurquoise-100;
 	}
 
 	nav a {
