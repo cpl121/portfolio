@@ -5,5 +5,5 @@ export function printLogs() {
    \\ /\\ /) _)/ (_/( (_(  O ) \\/ \\) _) 
    (_/\\_|____)____/\\___)__/\\_)(_(____)
        `);
-	console.log('Made with love by @cpl121');
+	console.log('Made with love by @cpl121.eth');
 }

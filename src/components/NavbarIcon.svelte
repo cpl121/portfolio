@@ -5,6 +5,7 @@
 	export let onClick = (): void => {};
 </script>
 
+<!-- svelte-ignore a11y_consider_explicit_label -->
 <button
 	class="text-grey-200 hover:text-grey-500 mr-4 transition-transform duration-300 ease-in-out focus:outline-none z-20 mt-4"
 	class:open

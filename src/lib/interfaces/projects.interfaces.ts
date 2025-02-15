@@ -6,4 +6,5 @@ export interface GithubRepository {
 	html_url?: string;
 	githubUrl?: string;
 	homepage?: string;
+	technologies?: string[];
 }

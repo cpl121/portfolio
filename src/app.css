@@ -4,10 +4,10 @@
 
 @layer components {
 	.card {
-		@apply border-2 border-solid ring-1 ring-teal-500 rounded-lg shadow-md shadow-teal-500/75;
+		@apply border-2 border-solid ring-1 ring-customTurquoise-200 rounded-lg;
 	}
 	.card:hover {
-		@apply shadow-xl shadow-teal-500/75;
+		@apply shadow-md shadow-customTurquoise-300;
 	}
 	.no-scroll {
 		@apply overflow-hidden;

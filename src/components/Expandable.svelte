@@ -1,8 +1,11 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { Pill } from '$components';
+	import { modeStore } from '$lib';
 
 	export let title: string;
+	export let company: string;
+	export let dates: string;
 	export let summary: string;
 	export let technologies: string[];
 	let isOpen = false;
@@ -12,9 +15,14 @@
 	}
 </script>
 
-<div class="card mb-2">
+<div class="card">
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div class="title" on:click={toggleOpen} on:keypress={toggleOpen}>
-		<h2 class="p-2">{title}</h2>
+		<div class="flex flex-col px-4 py-2">
+			<h1 class="font-bold text-customTurquoise-400">{title}</h1>
+			<span class="font-semibold">{company}</span>
+			<span class={`text-xs ${$modeStore === 'dark' ? 'text-gray-50 font-thin' : 'text-zinc-900 font-semibold'} pt-2`}>{dates}</span>
+		</div>
 		<svg
 			class:open={isOpen}
 			xmlns="http://www.w3.org/2000/svg"
@@ -25,9 +33,11 @@
 		>
 	</div>
 	{#if isOpen}
-		<div class="p-8" transition:fly={{ y: -20, duration: 400 }}>
-			{@html summary}
-			<div class="flex flex-wrap space-x-2 mt-4 items-center">
+		<div class="px-8 py-4" transition:fly={{ y: -20, duration: 400 }}>
+			<span class="text-xl">
+				{@html summary}
+			</span>
+			<div class="flex flex-wrap gap-2 mt-4">
 				{#each technologies as technology}
 					<Pill data={technology} />
 				{/each}
