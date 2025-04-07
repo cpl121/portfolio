@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { modeStore, printLogs } from '$lib';
+	import { Scene } from '$components';
 	import { onMount } from 'svelte';
-	import { Title, Logo } from '$lib/images';
+	import { Title } from '$lib/images';
+	import { Canvas } from '@threlte/core';
 
 	onMount(() => {
 		printLogs();
@@ -13,19 +15,24 @@
 	<meta name="description" content="CPL121 Portfolio" />
 </svelte:head>
 
-<section class="lg:mt-32 flex items-center space-y-12">
-	<div class="card borders max-w">
+<section class="lg:mt-12 flex items-center space-y-12 md:max-w-2xl md:mx-auto">
+	<div class="card borders w-full">
 		<div
 			class={`flex flex-col items-center space-y-8 p-8 md:p-16 ${
 				$modeStore === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'
 			}`}
 		>
-		<img data-mode={$modeStore} src={Logo} alt='Logo' class="h-28 w-28" />
-			<img data-mode={$modeStore} src={Title} alt='Title' class="h-24 w-auto" />
+			<!-- <img data-mode={$modeStore} src={Logo} alt="Logo" class="h-28 w-28" /> -->
+			<img data-mode={$modeStore} src={Title} alt="Title" class="h-24 w-auto" />
 			<h1 data-text="WEB3XR | FULL-STACK DEVELOPER" class="subtitle">
 				<mark class="mark">WEB3XR | FULL-STACK DEVELOPER</mark>
 			</h1>
 		</div>
+	</div>
+	<div class="w-full">
+		<Canvas>
+			<Scene />
+		</Canvas>
 	</div>
 </section>
 
@@ -37,7 +44,6 @@
 
 	.borders {
 		@apply m-2 p-2 rounded-lg bg-gradient-to-tl from-customTurquoise-100 via-customTurquoise-400 to-customTurquoise-200;
-		/* animation: rotate 10s linear infinite; */
 	}
 
 	.subtitle {

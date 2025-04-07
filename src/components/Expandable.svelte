@@ -21,7 +21,10 @@
 		<div class="flex flex-col px-4 py-2">
 			<h1 class="font-bold text-customTurquoise-400">{title}</h1>
 			<span class="font-semibold">{company}</span>
-			<span class={`text-xs ${$modeStore === 'dark' ? 'text-gray-50 font-thin' : 'text-zinc-900 font-semibold'} pt-2`}>{dates}</span>
+			<span
+				class={`text-xs ${$modeStore === 'dark' ? 'text-gray-50 font-thin' : 'text-zinc-900 font-semibold'} pt-2`}
+				>{dates}</span
+			>
 		</div>
 		<svg
 			class:open={isOpen}

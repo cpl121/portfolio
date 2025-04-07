@@ -10,11 +10,11 @@
 	const currentPath = derived(page, ($page) => $page.url.pathname);
 
 	interface Item {
-		title: string,
-		url: string	}
+		title: string;
+		url: string;
+	}
 
-		
-	const isSelectedPage = (url: string) => $currentPath === url
+	const isSelectedPage = (url: string) => $currentPath === url;
 
 	const ITEMS: Item[] = [
 		{

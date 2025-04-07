@@ -228,7 +228,12 @@
 			<div class="flex flex-row justify-around items-center">
 				{#each SOCIAL_MEDIA as media}
 					<a href={media.url} target="_blank" rel="noopener noreferrer">
-						<img data-mode={$modeStore} src={media.logo} alt={media.title} class={`h-12 w-auto invert-50 hover:invert-0`} />
+						<img
+							data-mode={$modeStore}
+							src={media.logo}
+							alt={media.title}
+							class={`h-12 w-auto invert-50 hover:invert-0`}
+						/>
 					</a>
 				{/each}
 			</div>
