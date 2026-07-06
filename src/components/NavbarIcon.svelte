@@ -1,17 +1,17 @@
 <script lang="ts">
 	export let open = false;
 
-	// eslint-disable-next-line
 	export let onClick = (): void => {};
 </script>
 
 <button
-	class="text-grey-200 hover:text-grey-500 mr-4 transition-transform duration-300 ease-in-out focus:outline-none z-20 mt-4"
+	class="text-grey-200 hover:text-grey-500 mr-4 transition-transform duration-300 ease-in-out z-20 mt-4 p-1"
 	class:open
 	on:click={onClick}
-	on:keydown={onClick}
+	aria-label="Toggle navigation menu"
+	aria-expanded={open}
 >
-	<svg width="34" height="24">
+	<svg width="34" height="24" aria-hidden="true">
 		<line
 			class="top stroke-current stroke-2 transition-transform duration-300 ease-in-out"
 			x1="0"

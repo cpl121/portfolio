@@ -1,23 +1,30 @@
 <script lang="ts">
-	export let name: string;
-	export let url = '';
-	export let githubUrl = '';
-	export let description: string;
+	import type { GithubRepository } from '$lib';
+
+	export let repo: GithubRepository;
 </script>
 
-<div class="card p-4">
-	<h2>
-		{#if url !== ''}
-			<a href={url} target="_blank" rel="noopener noreferrer" class="text-teal-500">{name}</a>
+<div class="card card-interactive p-4">
+	<h3 class="font-title text-xl">
+		{#if repo.url}
+			<a
+				href={repo.url}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-link transition-colors duration-200">{repo.name}</a
+			>
 		{:else}
-			{name}
+			{repo.name}
 		{/if}
-		{#if githubUrl !== ''}
-			- <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="text-teal-500"
-				>View on Github</a
+		{#if repo.githubUrl}
+			- <a
+				href={repo.githubUrl}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="text-link transition-colors duration-200">View on Github</a
 			>
 		{/if}
-	</h2>
+	</h3>
 	<br />
-	<p>{description}</p>
+	<p>{repo.description}</p>
 </div>

@@ -1,32 +1,56 @@
-# cpl121.eth - Web3 Fullstack Developer
+# Portfolio — César Peón (cpl121)
 
-Hi! I'm a **Web3 Fullstack Developer** with a passion for building innovative decentralized applications and blockchain solutions. Currently, Im working with **IOTA**, exploring cutting-edge technologies for scalable and secure systems. I've also had the opportunity to work on projects with **Polygon** and **Solana** projects, creating seamless dApps and smart contracts.
+Personal portfolio of [César Peón](https://github.com/cpl121), full-stack developer specialized in **Web3**, **VR/3D** experiences, **OTT** streaming platforms and **AI** products. Founder of 1to1 Digital Solutions.
 
----
+🔗 **Live:** [cpl121.eth.limo](https://cpl121.eth.limo)
 
-## 🌟 Why Web3?
-The decentralized web represents freedom, innovation, and endless possibilities. I’m driven by the challenge of solving complex problems, enhancing user experiences, and contributing to the evolution of blockchain technology.
+## Tech stack
 
----
+- [SvelteKit 2](https://kit.svelte.dev/) + [Svelte 5](https://svelte.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [`@sveltejs/adapter-static`](https://kit.svelte.dev/docs/adapter-static) — the whole site is prerendered to static HTML
+- TypeScript, ESLint (flat config) + Prettier
 
-## 🛠️ Projects & Highlights
-- **Wallet Development:** Built and optimized wallets with Ledger integration for secure and user-friendly asset management.
-- **Blockchain Explorers:** Designed and developed explorers to visualize on-chain data and analytics.
-- **Ledger-integrated dApp:** Built a decentralized application with seamless wallet integration for secure transactions.
-- **Cross-chain Solutions:** Worked on bridging assets.
-- **Protocol Development:** Contributed to scaling efforts and smart contract standards on IOTA.
+## Project structure
 
----
+```
+src/
+├── components/          Reusable UI (Card, FeaturedCard, Expandable, Seo…)
+├── lib/
+│   ├── constants/       Site metadata (URLs, OG defaults)
+│   ├── data/            Curated projects & collaborations (edit these to add work)
+│   ├── interfaces/      Shared TypeScript types
+│   └── stores/          Theme (light/dark) store with persistence
+└── routes/
+    ├── +page.svelte              Home (hero + featured projects)
+    ├── projects/                 Projects index (featured + collaborations + GitHub repos)
+    ├── projects/[slug]/          Detail page per featured project
+    ├── about/                    Experience, education, technologies
+    └── sitemap.xml/              Generated sitemap
+```
 
-## 💻 Tech Stack
-- **Frontend:** React.js, Next.js, Svelte.js, Tailwind CSS, TypeScript
-- **Backend:** Node.js, GraphQL, REST APIs
-- **Smart Contract:** Solidity, Move
-- **Blockchain:** IOTA, Polygon, Solana
+## Adding a project
 
----
+Featured and open-source work is data-driven — no need to touch components:
 
-## 📫 Let's Connect!
-- **Web:** [cpl121.eth](https://cpl121.eth.limo)
-- **GitHub:** [github.com/cpl121](https://github.com/cpl121)
-- **Twitter:** [@cpl121_](https://x.com/cpl121_)
+- **Featured project** (with badge + detail page): add an entry to `src/lib/data/projects.ts` and a `1280×720` screenshot in `static/images/projects/<slug>.jpg`. To surface it on the home page, add its slug to `HOME_FEATURED_SLUGS`.
+- **Collaboration** (simple card): add an entry to `src/lib/data/collaborations.ts`.
+- **Open-source repo:** loaded automatically from the GitHub API on the projects page — nothing to do.
+
+## Development
+
+```bash
+npm install
+npm run dev       # start the dev server
+npm run build     # production build (prerendered to ./build)
+npm run preview   # preview the production build
+npm run check     # svelte-check (types)
+npm run lint      # prettier --check + eslint
+npm run format    # prettier --write
+```
+
+Requires Node.js ≥ 20. This project uses **npm** as its package manager (`package-lock.json`).
+
+## License
+
+[MIT](./LICENSE)

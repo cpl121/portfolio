@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	html[data-mode='dark'] {
+		@apply bg-zinc-800;
+		/* teal-400: brighter link on dark surfaces */
+		--link: theme('colors.teal.400');
+	}
+	html[data-mode='light'] {
+		@apply bg-slate-200;
+		/* teal-700: darker link to keep 4.5:1 contrast on light surfaces */
+		--link: theme('colors.teal.700');
+	}
+
+	h1 {
+		@apply font-title text-2xl;
+	}
+
+	h2 {
+		@apply font-title text-xl;
+	}
+
+	/* Keyboard focus indicator — currentColor inherits already-contrasted text color. */
+	:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+}
+
 @layer components {
 	.card {
 		@apply border-2 border-solid ring-1 ring-teal-500 rounded-lg shadow-md shadow-teal-500/75;
@@ -9,17 +37,36 @@
 	.card:hover {
 		@apply shadow-xl shadow-teal-500/75;
 	}
+	/* Interactive cards lift slightly on hover (transform only — no layout shift). */
+	.card-interactive {
+		@apply transition duration-200;
+	}
+	.card-interactive:hover {
+		@apply -translate-y-1;
+	}
 	.no-scroll {
 		@apply overflow-hidden;
 	}
+
+	/* Skip link: hidden until focused, then visible at the top-left. */
+	.skip-link {
+		@apply absolute left-2 z-50 rounded-md bg-teal-600 px-4 py-2 font-bold text-zinc-50;
+		top: -3.5rem;
+		transition: top 0.2s ease;
+	}
+	.skip-link:focus {
+		top: 0.5rem;
+	}
 }
 
-@layer base {
-	h1 {
-		@apply font-title text-2xl;
-	}
-
-	h2 {
-		@apply font-title text-xl;
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
 	}
 }

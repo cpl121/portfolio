@@ -1,18 +1,29 @@
-import { GITHUB_REPOSITORIES_CPL121_URL, type GithubRepository } from '$lib';
+import { GITHUB_REPOSITORIES_CPL121_URL } from '$lib/constants';
+import type { GithubApiRepository, GithubRepository } from '$lib/interfaces';
+import type { PageLoad } from './$types';
 
-export async function load() {
-	GITHUB_REPOSITORIES_CPL121_URL;
-	const response = await fetch(GITHUB_REPOSITORIES_CPL121_URL);
-	const data = await response.json();
+export const load: PageLoad = async ({ fetch }) => {
+	const fallback = { repositories: [] as GithubRepository[] };
 
-	const projects: GithubRepository[] = data.map((project: GithubRepository) => {
-		return {
-			id: project.id,
-			name: project.name,
-			githubUrl: project.html_url,
-			description: project.description,
-			url: project.homepage ?? ''
-		};
-	});
-	return { projects };
-}
+	try {
+		const response = await fetch(`${GITHUB_REPOSITORIES_CPL121_URL}?per_page=100&sort=pushed`);
+		if (!response.ok) return fallback;
+
+		const data: unknown = await response.json();
+		if (!Array.isArray(data)) return fallback;
+
+		const repositories: GithubRepository[] = (data as GithubApiRepository[])
+			.filter((repo) => !repo.fork && !repo.archived)
+			.map((repo) => ({
+				id: repo.id,
+				name: repo.name,
+				githubUrl: repo.html_url,
+				description: repo.description ?? '',
+				url: repo.homepage ?? undefined
+			}));
+
+		return { repositories };
+	} catch {
+		return fallback;
+	}
+};

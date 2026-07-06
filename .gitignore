@@ -10,3 +10,11 @@ node_modules
 .output
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# This project uses npm — keep package-lock.json as the single source of truth
+yarn.lock
+pnpm-lock.yaml
+
+# Test artifacts
+test-results/
+playwright-report/

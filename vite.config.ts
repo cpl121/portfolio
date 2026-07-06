@@ -1,15 +1,14 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { plugin as mdPlugin, Mode } from 'vite-plugin-markdown';
-import sass from 'sass';
-import { defineConfig } from 'vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [sveltekit(), mdPlugin({ mode: [Mode.HTML] })],
-	css: {
-		preprocessorOptions: {
-			scss: {
-				implementation: sass
-			}
-		}
+	plugins: [sveltekit(), svelteTesting()],
+	test: {
+		environment: 'jsdom',
+		setupFiles: ['./vitest-setup.ts'],
+		include: ['src/**/*.test.ts'],
+		restoreMocks: true,
+		unstubGlobals: true
 	}
 });
