@@ -1,111 +1,94 @@
 <script lang="ts">
-	import type { GithubRepository } from '$lib';
-	import { Card } from '$components';
+	import { COLLABORATIONS_PROJECTS, FEATURED_PROJECTS, GITHUB_CPL121_URL } from '$lib';
+	import { Card, FeaturedCard, Seo } from '$components';
+	import type { PageData } from './$types';
 
-	// eslint-disable-next-line
-	export let data: { projects: GithubRepository[] } = { projects: [] };
+	export let data: PageData;
 
-	const COLLABORATIONS_PROJECTS: GithubRepository[] = [
-		{
-			name: 'IOTA Rebased',
-			url: 'https://github.com/iotaledger/iota',
-			description:
-				'About Bringing the real world to Web3 with a scalable, decentralized and programmable DLT infrastructure.',
-			technologies: ['Wallet', 'Explorer', 'Dashboard', 'SDK', 'Move']
-		},
-		{
-			name: 'IOTA Wallet - Firefly',
-			url: 'https://github.com/iotaledger/firefly',
-			description: 'The official IOTA and Shimmer wallet.',
-			technologies: ['Svelte-kit', 'Tangle']
-		},
-		{
-			name: 'IOTA Website',
-			url: 'https://www.iota.org/',
-			description:
-				'IOTA has re-engineered the principles of existing distributed ledger technology to provide a feeless, open-source, secure data and financial exchange protocol for everyone.',
-			technologies: ['Svelte-kit']
-		},
-		{
-			name: 'Synergyland Tavern',
-			url: 'https://tavern.synergyland.live/',
-			description:
-				'Synergyland is a ARPG Play to Earn game project powered by Solana. The tavern is a web application for rewards through season pass with which you can obtain nfts to use in the main game.',
-			technologies: ['Solana', 'Next', 'Express']
-		},
-		{
-			name: 'Sugar Rush',
-			url: 'https://sugar-rush.boxfish.studio/',
-			description:
-				'Quickly create and manage Metaplex Candymachines and NFTs in Solana from your browser',
-			technologies: ['Solana', 'NFT', 'Next']
-		},
-		{
-			name: 'Boxfish Website',
-			url: 'https://boxfish.studio/',
-			description: 'Top-quality solutions for emerging industries and technologies.',
-			technologies: ['Svelte-kit']
-		},
-		{
-			name: 'Shimmer',
-			url: 'https://shimmer.network/',
-			description:
-				'Shimmer  is a feeless, parallelized DAG ledger to secure and create fully customizable smart contract chains.',
-			technologies: ['Svelte-kit']
-		},
-		{
-			name: 'Assembly',
-			url: 'https://assembly.sc/',
-			description:
-				'Assembly is a permissionless protocol to build, connect and deploy smart contracts on a feeless multi-chain network.',
-			technologies: ['Svelte-kit']
-		},
-		{
-			name: 'Firefly Website',
-			url: 'https://firefly.iota.org/',
-			description:
-				'A lightweight wallet for sending and receiving your IOTA assets on the go. Highly secure and easy to use, with mobile-specific functionality.',
-			technologies: ['Svelte-kit']
-		},
-		{
-			name: 'Iota Library',
-			url: 'https://assets.iota.org/',
-			description: 'All assets of IOTA of the asset library are free to use, rehash, redesign.',
-			technologies: ['Next', 'Prisma']
-		},
-		{
-			name: 'Iota Roadmap',
-			url: 'https://roadmap.iota.org/',
-			description: 'Interactive Roadmap of IOTA Research and Development.'
-		},
-		{
-			name: 'Klinikare',
-			url: 'https://app.klinikare.com',
-			description:
-				'KliniKare is specialized in the development of software for the comprehensive management of universities, clinics and laboratories.',
-			technologies: ['Angular', 'Node', 'PostgreSQL']
-		},
-		{
-			name: 'Gestiona',
-			url: 'http://www.gestiondeclinica.es/',
-			description:
-				'Gestiona by Klinikare is specialized in the development of software for the integral management of all types of clinics.'
-		}
-	];
+	let showRepositories = false;
 </script>
+
+<Seo
+	title="Projects — cpl121"
+	description="Featured work and open-source projects by César Peón (cpl121): VR worlds, interactive 3D experiences, OTT streaming platforms and AI products."
+/>
 
 <div class="flex flex-col space-y-4">
 	<h1 class="text-5xl underline">Projects</h1>
-	<h2 class="font-bold py-4">My contributions</h2>
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-		{#each COLLABORATIONS_PROJECTS as repo}
-			<Card {...repo} />
+
+	<h2 class="text-2xl font-bold py-4">Featured</h2>
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		{#each FEATURED_PROJECTS as project (project.slug)}
+			<FeaturedCard {project} showBadge={false} />
 		{/each}
 	</div>
-	<h2 class="font-bold py-4">Own Projects</h2>
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-		{#each data?.projects as repo}
-			<Card {...repo} />
+
+	<h2 class="text-2xl font-bold py-4">My contributions</h2>
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		{#each COLLABORATIONS_PROJECTS as repo (repo.name)}
+			<Card {repo} />
 		{/each}
 	</div>
+
+	<h2 class="text-2xl font-bold py-4">Open-source projects</h2>
+	{#if data.repositories.length > 0}
+		<div>
+			<button
+				type="button"
+				class="repo-toggle"
+				on:click={() => (showRepositories = !showRepositories)}
+				aria-expanded={showRepositories}
+			>
+				{showRepositories
+					? 'Hide repositories'
+					: `Show ${data.repositories.length} repositories from GitHub`}
+				<svg
+					aria-hidden="true"
+					class:open={showRepositories}
+					class="chevron"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					width="24"
+					height="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" /></svg
+				>
+			</button>
+		</div>
+		{#if showRepositories}
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{#each data.repositories as repo (repo.id)}
+					<Card {repo} />
+				{/each}
+			</div>
+		{/if}
+	{:else}
+		<p>
+			Could not load the repositories from GitHub right now — you can browse them directly on
+			<a
+				href={GITHUB_CPL121_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="font-bold text-link transition-colors duration-200">GitHub</a
+			>.
+		</p>
+	{/if}
 </div>
+
+<style>
+	.repo-toggle {
+		@apply inline-flex items-center gap-2 rounded-lg border-2 border-accent px-4 py-2 font-bold;
+		@apply transition-colors duration-200;
+	}
+
+	.repo-toggle:hover {
+		@apply bg-accent/20;
+	}
+
+	.chevron {
+		@apply transition-transform duration-200;
+	}
+
+	.open {
+		@apply rotate-180;
+	}
+</style>

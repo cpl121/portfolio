@@ -1,54 +1,164 @@
 <script lang="ts">
-	import { modeStore, printLogs } from '$lib';
-	import { Scene } from '$components';
+	import {
+		CONTACT_EMAIL,
+		GITHUB_CPL121_URL,
+		HOME_FEATURED_PROJECTS,
+		LINKEDIN_URL,
+		printLogs
+	} from '$lib';
+	import { FeaturedCard, LinkButton, Scene3d, Seo } from '$components';
 	import { onMount } from 'svelte';
-	import { Title } from '$lib/images';
-	import { Canvas } from '@threlte/core';
+
+	const NAME = 'César Peón';
+
+	const PILLARS = [
+		{
+			title: 'XR & Real-time 3D',
+			description:
+				'Browser-based VR worlds and interactive 3D experiences with Three.js, React Three Fiber and Hyperfy — no installs required.',
+			// lucide "box"
+			icon: 'M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z M3.3 7l8.7 5 8.7-5 M12 22V12'
+		},
+		{
+			title: 'Blockchain & Web3',
+			description:
+				'dApps, wallets and protocol work on Solana and IOTA — from smart contracts to polished, usable frontends.',
+			// lucide "link"
+			icon: 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'
+		},
+		{
+			title: 'Product Engineering',
+			description:
+				'Full-stack products end to end: OTT streaming for web and smart TVs, and AI-powered SaaS with Next.js, Supabase and Stripe.',
+			// lucide "layers"
+			icon: 'm12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z M22 17.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65 M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65'
+		}
+	];
 
 	onMount(() => {
 		printLogs();
 	});
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="CPL121 Portfolio" />
-</svelte:head>
+<Seo
+	title="César Peón (cpl121) — Full-Stack Developer · XR & Blockchain"
+	description="Portfolio of César Peón (cpl121), full-stack developer specialized in XR/3D experiences, Blockchain/Web3 and product engineering. Founder of 1to1 Digital Solutions."
+/>
 
-<section class="lg:mt-12 flex items-center space-y-12 md:max-w-2xl md:mx-auto">
+<section class="hero">
 	<div class="card borders w-full">
 		<div
-			class={`flex flex-col items-center space-y-8 p-8 md:p-16 ${
-				$modeStore === 'dark' ? 'bg-zinc-800' : 'bg-slate-200'
-			}`}
+			class="inner flex flex-col items-center gap-5 sm:gap-7 p-6 sm:p-10 bg-slate-200 dark:bg-zinc-800"
 		>
-			<!-- <img data-mode={$modeStore} src={Logo} alt="Logo" class="h-28 w-28" /> -->
-			<img data-mode={$modeStore} src={Title} alt="Title" class="h-24 w-auto" />
-			<h1 data-text="WEB3XR | FULL-STACK DEVELOPER" class="subtitle">
-				<mark class="mark">WEB3XR | FULL-STACK DEVELOPER</mark>
+			<div class="scene-wrap">
+				<Scene3d />
+			</div>
+			<p class="eyebrow">@cpl121</p>
+			<h1 class="title" aria-label={NAME}>
+				{#each NAME.split(' ') as word, wordIndex (wordIndex)}
+					<span class="flex flex-row" aria-hidden="true">
+						{#each word.split('') as char, charIndex (charIndex)}
+							<span class="word" data-text={char}>{char}</span>
+						{/each}
+					</span>
+					<span class="word" data-text="&nbsp;" aria-hidden="true">&nbsp;</span>
+				{/each}
 			</h1>
+			<p data-text="FULL-STACK DEVELOPER · XR & BLOCKCHAIN" class="subtitle">
+				<mark class="mark">FULL-STACK DEVELOPER · XR & BLOCKCHAIN</mark>
+			</p>
+			<p class="max-w-xl text-center">
+				I build VR worlds, interactive 3D experiences and Web3 products that run in the browser.
+			</p>
+			<div class="flex flex-wrap justify-center gap-3">
+				<a
+					href="/projects/"
+					class="inline-block rounded-lg bg-accent-strong px-4 py-2 font-bold text-zinc-50 no-underline transition-colors duration-200 hover:bg-accent"
+					>View projects</a
+				>
+				<LinkButton href={`mailto:${CONTACT_EMAIL}`}>Get in touch</LinkButton>
+			</div>
 		</div>
-	</div>
-	<div class="w-full">
-		<Canvas>
-			<Scene />
-		</Canvas>
 	</div>
 </section>
 
-<style class="scss">
-	section {
-		@apply flex flex-col justify-center items-center;
-		flex: 0.2;
+<section class="mt-16 flex flex-col space-y-6" aria-labelledby="what-i-do">
+	<h2 id="what-i-do" class="text-2xl font-bold">What I do</h2>
+	<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+		{#each PILLARS as pillar (pillar.title)}
+			<div class="card flex flex-col gap-3 p-6">
+				<svg
+					class="text-accent"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					width="32"
+					height="32"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d={pillar.icon} />
+				</svg>
+				<h3 class="text-xl font-title">{pillar.title}</h3>
+				<p class="text-base">{pillar.description}</p>
+			</div>
+		{/each}
+	</div>
+</section>
+
+<section class="mt-16 flex flex-col space-y-6" aria-labelledby="featured-projects">
+	<div class="flex items-baseline justify-between">
+		<h2 id="featured-projects" class="text-2xl font-bold">Featured projects</h2>
+		<a href="/projects/" class="font-bold text-link transition-colors duration-200"
+			>View all projects →</a
+		>
+	</div>
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+		{#each HOME_FEATURED_PROJECTS as project (project.slug)}
+			<FeaturedCard {project} />
+		{/each}
+	</div>
+</section>
+
+<section
+	class="mt-20 mb-8 flex flex-col items-center space-y-4 text-center"
+	aria-labelledby="contact"
+>
+	<h2 id="contact" class="text-2xl font-bold">Let's build something together</h2>
+	<p class="max-w-xl">
+		Have an XR experience, a Web3 product or an ambitious web app in mind? I'm open to freelance
+		projects and collaborations through 1to1 Digital Solutions.
+	</p>
+	<div class="flex flex-wrap justify-center gap-3">
+		<LinkButton href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</LinkButton>
+		<LinkButton href={GITHUB_CPL121_URL} external>GitHub</LinkButton>
+		<LinkButton href={LINKEDIN_URL} external>LinkedIn</LinkButton>
+	</div>
+</section>
+
+<style>
+	.hero {
+		@apply flex flex-col justify-center items-center mt-4;
 	}
 
 	.borders {
-		@apply m-2 p-2 rounded-lg bg-gradient-to-tl from-customTurquoise-100 via-customTurquoise-400 to-customTurquoise-200;
+		@apply m-2 p-2 rounded-lg bg-gradient-to-tl from-teal-300 via-emerald-700 to-teal-500;
+	}
+
+	.scene-wrap {
+		@apply w-full;
+		height: clamp(160px, 26vw, 280px);
+	}
+
+	.eyebrow {
+		@apply font-title uppercase tracking-widest text-sm text-accent;
 	}
 
 	.subtitle {
-		@apply text-2xl tracking-wider relative text-center;
-		margin: 2rem 0rem 1.5rem;
+		@apply text-base sm:text-xl md:text-2xl tracking-wider relative text-center;
 	}
 	.subtitle::before,
 	.subtitle::after {
@@ -71,10 +181,31 @@
 		@apply p-0 bg-no-repeat relative;
 		color: inherit;
 		background: none;
-		background-image: linear-gradient(120deg, var(--mark) 0%, var(--mark) 100%);
-		background-size: 0% 0.3em;
-		background-position: 0 80%;
-		background-size: 100% 0.3em;
+	}
+
+	.title {
+		@apply font-home text-5xl sm:text-6xl md:text-7xl tracking-wider;
+		@apply flex flex-row flex-wrap justify-center text-center;
+	}
+
+	.word {
+		position: relative;
+	}
+
+	.word::before {
+		content: attr(data-text);
+		position: absolute;
+		top: 0;
+		left: 0;
+		color: transparent;
+	}
+
+	.word:hover::before {
+		@apply text-teal-300;
+	}
+
+	.word:hover {
+		animation: bounce 0.5s linear infinite;
 	}
 
 	@keyframes bounce {
@@ -86,12 +217,6 @@
 		}
 		100% {
 			transform: translateY(0);
-		}
-	}
-
-	@keyframes rotate {
-		100% {
-			transform: rotate(1turn);
 		}
 	}
 

@@ -1,48 +1,41 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { Pill } from '$components';
-	import { modeStore } from '$lib';
 
 	export let title: string;
-	export let company: string;
-	export let dates: string;
 	export let summary: string;
 	export let technologies: string[];
-	let isOpen = false;
+	/** Initial state only — the component owns its open state after mount. */
+	export let initialOpen = false;
+
+	let isOpen = initialOpen;
 
 	function toggleOpen() {
 		isOpen = !isOpen;
 	}
 </script>
 
-<div class="card">
-	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="title" on:click={toggleOpen} on:keypress={toggleOpen}>
-		<div class="flex flex-col px-4 py-2">
-			<h1 class="font-bold text-customTurquoise-400">{title}</h1>
-			<span class="font-semibold">{company}</span>
-			<span
-				class={`text-xs ${$modeStore === 'dark' ? 'text-gray-50 font-thin' : 'text-zinc-900 font-semibold'} pt-2`}
-				>{dates}</span
-			>
-		</div>
+<div class="card mb-2">
+	<button type="button" class="title" on:click={toggleOpen} aria-expanded={isOpen}>
+		<h3 class="p-2 text-left text-xl font-title">{title}</h3>
 		<svg
+			aria-hidden="true"
+			class="chevron"
 			class:open={isOpen}
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 24 24"
 			fill="currentColor"
-			width="16"
-			height="16"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" /></svg
+			width="28"
+			height="28"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" /></svg
 		>
-	</div>
+	</button>
 	{#if isOpen}
-		<div class="px-8 py-4" transition:fly={{ y: -20, duration: 400 }}>
-			<span class="text-xl">
-				{@html summary}
-			</span>
-			<div class="flex flex-wrap gap-2 mt-4">
-				{#each technologies as technology}
-					<Pill data={technology} />
+		<div class="summary p-8" transition:fly={{ y: -20, duration: 400 }}>
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -- static author-controlled HTML -->
+			{@html summary}
+			<div class="flex flex-wrap space-x-2 mt-4 items-center">
+				{#each technologies as technology (technology)}
+					<Pill label={technology} />
 				{/each}
 			</div>
 		</div>
@@ -51,10 +44,24 @@
 
 <style>
 	.title {
-		@apply flex items-center justify-between cursor-pointer p-2 flex-1;
+		@apply flex items-center justify-between cursor-pointer p-2 w-full text-left gap-2;
+	}
+
+	.chevron {
+		@apply shrink-0 transition-transform duration-200;
 	}
 
 	.open {
 		@apply rotate-180;
+	}
+
+	/* Styling for the raw HTML lists coming from the summary data. */
+	.summary :global(ul) {
+		margin: 10px 0 10px 20px;
+		list-style-type: disc;
+	}
+
+	.summary :global(p + p) {
+		margin-top: 10px;
 	}
 </style>

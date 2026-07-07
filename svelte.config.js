@@ -11,10 +11,16 @@ const config = {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: null,
+			// Served by IPFS gateways (e.g. eth.limo) as the custom not-found page.
+			fallback: '404.html',
 			precompress: false,
 			strict: true
 		}),
+		// Relative asset paths so the build works from any IPFS gateway / CID subpath,
+		// not just the root domain.
+		paths: {
+			relative: true
+		},
 		alias: {
 			$components: 'src/components',
 			$lib: 'src/lib'

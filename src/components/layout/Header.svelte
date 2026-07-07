@@ -1,62 +1,58 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { NavbarIcon } from '$components';
-	import { SOCIAL_MEDIA, toggleMode, modeStore } from '$lib';
-	import { Dark } from '$lib/images';
-	import { derived } from 'svelte/store';
+	import { onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
+	import { NavbarIcon } from '$components';
+	import { GITHUB_CPL121_URL, LINKEDIN_URL, TWITTER_URL, toggleMode, modeStore } from '$lib';
+	import { Github, Twitter, Linkedin, Dark, Light } from '$lib/images';
 
-	// Crear un store derivado para el path actual
-	const currentPath = derived(page, ($page) => $page.url.pathname);
+	const ITEMS = [
+		{ title: 'Home', url: '/' },
+		{ title: 'Projects', url: '/projects/' },
+		{ title: 'About me', url: '/about/' }
+	];
 
-	interface Item {
-		title: string;
-		url: string;
-	}
-
-	const isSelectedPage = (url: string) => $currentPath === url;
-
-	const ITEMS: Item[] = [
-		{
-			title: 'Home',
-			url: '/'
-		},
-		{
-			title: 'Projects',
-			url: '/projects/'
-		},
-		{
-			title: 'About me',
-			url: '/about/'
-		}
+	const SOCIAL_MEDIA = [
+		{ title: 'GitHub', url: GITHUB_CPL121_URL, logo: Github },
+		{ title: 'Twitter', url: TWITTER_URL, logo: Twitter },
+		{ title: 'Linkedin', url: LINKEDIN_URL, logo: Linkedin }
 	];
 
 	let open = false;
+
+	$: if (browser) document.body.classList.toggle('no-scroll', open);
+
+	onDestroy(() => {
+		if (browser) document.body.classList.remove('no-scroll');
+	});
+
 	function handleMenu() {
 		open = !open;
-		if (open) {
-			document.body.classList.add('no-scroll');
-		} else {
-			document.body.classList.remove('no-scroll');
-		}
 	}
 
-	function goToUrl(url: string) {
+	function closeMenu() {
 		open = false;
-		document.body.classList.remove('no-scroll');
-		goto(url);
+	}
+
+	function onKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape' && open) closeMenu();
 	}
 </script>
 
+<svelte:window on:keydown={onKeydown} />
+
 <header>
-	<div class="md:hidden mx-4 flex justify-center items-center">
+	<div class="md:hidden mx-4 mt-4 flex items-center justify-between">
+		<a href="/" class="wordmark relative z-20" on:click={closeMenu}>cpl121</a>
 		<NavbarIcon bind:open onClick={handleMenu} />
 	</div>
-	<div class="flex justify-around invisible md:visible">
-		<nav hidden>
+
+	<div class="hidden md:flex items-center justify-between px-6">
+		<a href="/" class="wordmark">cpl121</a>
+		<nav aria-label="Main">
 			<ul>
-				{#each ITEMS as item}
-					<li aria-current={isSelectedPage(item.url) ? 'page' : undefined}>
+				{#each ITEMS as item (item.url)}
+					<li aria-current={$page.url.pathname === item.url ? 'page' : undefined}>
 						<a href={item.url}>{item.title}</a>
 					</li>
 				{/each}
@@ -64,40 +60,46 @@
 		</nav>
 
 		<div class="corner">
-			{#each SOCIAL_MEDIA as media}
+			{#each SOCIAL_MEDIA as media (media.url)}
 				<a class="corner-links" href={media.url} target="_blank" rel="noopener noreferrer">
-					<img data-mode={$modeStore} src={media.logo} alt={media.title} />
+					<img class="social-icon" src={media.logo} alt={media.title} />
 				</a>
 			{/each}
-			<button class="corner-links" on:click={toggleMode}>
-				{#if $modeStore === 'dark'}
-					<img data-mode={$modeStore} src={Dark} alt="Dark mode" />
-				{:else if $modeStore === 'light'}
-					<img data-mode={$modeStore} src={Dark} alt="Light mode" class="rotate-180" />
-				{/if}
+			<button
+				class="corner-links"
+				on:click={toggleMode}
+				aria-label={`Switch to ${$modeStore === 'dark' ? 'light' : 'dark'} mode`}
+			>
+				<img
+					class="social-icon"
+					src={$modeStore === 'dark' ? Dark : Light}
+					alt=""
+					aria-hidden="true"
+				/>
 			</button>
 		</div>
 	</div>
+
 	{#if open}
 		<div class="md:hidden w-screen h-screen absolute left-0 top-0 z-10">
 			<div class="flex flex-col justify-start space-y-20 h-full pt-32 backdrop-blur-xl">
-				<div class="flex flex-col justify-start items-center space-y-4">
-					{#each ITEMS as { title, url }}
-						{#if title && url}
-							<button
-								class={`${
-									isSelectedPage(url) ? 'border-b-2 border-customTurquoise-100' : ''
-								} font-bold text-3xl`}
-								on:click={() => goToUrl(url)}>{title}</button
-							>
-						{/if}
+				<nav aria-label="Mobile" class="flex flex-col justify-start items-center space-y-4">
+					{#each ITEMS as item (item.url)}
+						<a
+							href={item.url}
+							class={`${
+								$page.url.pathname === item.url ? 'border-b-2 border-teal-400' : ''
+							} font-bold text-3xl no-underline`}
+							aria-current={$page.url.pathname === item.url ? 'page' : undefined}
+							on:click={closeMenu}>{item.title}</a
+						>
 					{/each}
-				</div>
+				</nav>
 				<div class="flex flex-col justify-start items-center space-y-4">
-					{#each SOCIAL_MEDIA as { title, url }}
-						{#if title && url}
-							<a class="text-xl" href={url} target="_blank" rel="noopener noreferrer">{title}</a>
-						{/if}
+					{#each SOCIAL_MEDIA as media (media.url)}
+						<a class="text-xl" href={media.url} target="_blank" rel="noopener noreferrer"
+							>{media.title}</a
+						>
 					{/each}
 				</div>
 				<button on:click={toggleMode}>{$modeStore === 'dark' ? 'Light' : 'Dark'} Mode</button>
@@ -107,25 +109,33 @@
 </header>
 
 <style lang="scss">
+	.wordmark {
+		@apply font-home text-2xl no-underline;
+		@apply transition-colors duration-200;
+	}
+
+	.wordmark:hover {
+		@apply text-teal-400;
+	}
+
 	.corner {
-		@apply flex flex-row items-center w-[17%] space-x-2;
+		@apply flex flex-row items-center gap-1;
 	}
 
 	.corner-links {
-		@apply flex items-center justify-center;
-		@apply w-full h-full;
+		@apply flex items-center justify-center p-1;
 	}
 
-	.corner img {
-		@apply w-8 h-8;
-		@apply object-contain;
-		@apply invert-50;
+	.social-icon {
+		@apply w-8 h-8 object-contain invert-50;
+		@apply transition duration-200;
 	}
 
-	[data-mode='dark']:hover {
-		@apply invert-0;
+	:global(html[data-mode='dark']) .social-icon:hover {
+		@apply invert;
 	}
-	[data-mode='light']:hover {
+
+	:global(html[data-mode='light']) .social-icon:hover {
 		@apply invert-0;
 	}
 
@@ -154,12 +164,17 @@
 	}
 
 	li[aria-current='page'] {
-		@apply border-b-2 border-customTurquoise-100;
+		@apply border-b-2 border-teal-400;
 	}
 
 	nav a {
 		@apply flex items-center h-full px-2;
 		@apply font-bold text-xs uppercase;
 		@apply tracking-widest no-underline;
+		@apply transition-colors duration-200;
+	}
+
+	nav a:hover {
+		@apply text-teal-400;
 	}
 </style>
