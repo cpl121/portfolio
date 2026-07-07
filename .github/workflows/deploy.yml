@@ -1,0 +1,72 @@
+name: Deploy to IPFS
+
+# Publishes the prerendered site to IPFS (via Storacha) once CI passes on main.
+# The CID printed in the job summary goes into the ENS contenthash of
+# cpl121.eth as `ipfs://<CID>`, and eth.limo serves it at cpl121.eth.limo.
+#
+# Requires two repository secrets (generated once with the `storacha` CLI):
+#   STORACHA_PRINCIPAL  -> `storacha key create` (the base64 signing key)
+#   STORACHA_PROOF      -> `storacha delegation create <did> \
+#                            -c space/blob/add -c space/index/add \
+#                            -c filecoin/offer -c upload/add --base64`
+on:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    # Deploy only when CI succeeded on main, or on a manual run.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify build (confidentiality + sitemap)
+        run: npm run verify:build
+
+      - name: Pin to IPFS (Storacha)
+        id: ipfs
+        uses: storacha/add-to-web3@v4
+        with:
+          path_to_add: build
+          secret_key: ${{ secrets.STORACHA_PRINCIPAL }}
+          proof: ${{ secrets.STORACHA_PROOF }}
+
+      - name: Publish CID to job summary
+        run: |
+          CID='${{ steps.ipfs.outputs.cid }}'
+          {
+            echo '## 🛰️ Deployed to IPFS'
+            echo ''
+            echo "**CID:** \`$CID\`"
+            echo ''
+            echo '**Preview via gateway:**'
+            echo "- https://$CID.ipfs.dweb.link/"
+            echo "- ${{ steps.ipfs.outputs.url }}"
+            echo ''
+            echo '### Publish this build'
+            echo 'Set the `contenthash` of **cpl121.eth** to the value below at'
+            echo '<https://app.ens.domains/cpl121.eth> (one signed transaction).'
+            echo 'eth.limo then serves the new build at https://cpl121.eth.limo/'
+            echo ''
+            echo '```'
+            echo "ipfs://$CID"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

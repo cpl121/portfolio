@@ -51,6 +51,35 @@ npm run format    # prettier --write
 
 Requires Node.js ≥ 20. This project uses **npm** as its package manager (`package-lock.json`).
 
+## Deployment
+
+The site is fully prerendered and IPFS-friendly (relative asset paths, `404.html`
+fallback), and is served at [cpl121.eth.limo](https://cpl121.eth.limo) — the
+[eth.limo](https://eth.limo) gateway resolving the `contenthash` of the
+`cpl121.eth` ENS name.
+
+- **CI** (`.github/workflows/ci.yml`) runs the quality gate on every push/PR:
+  audit, lint, type-check, unit tests, build, `verify:build` and E2E smoke tests.
+- **Deploy** (`.github/workflows/deploy.yml`) runs after CI passes on `main`
+  (or manually via _Run workflow_): it builds, verifies, pins `build/` to IPFS
+  with [`storacha/add-to-web3`](https://github.com/storacha/add-to-web3), and
+  prints the resulting **CID** in the job summary.
+- **Publish:** set the `contenthash` of `cpl121.eth` to `ipfs://<CID>` at
+  [app.ens.domains](https://app.ens.domains/cpl121.eth) (one signed transaction).
+  Using an immutable CID — rather than IPNS — means the site never depends on a
+  record being continuously republished.
+
+One-time setup — add two repository secrets generated with the `storacha` CLI:
+
+```bash
+npm i -g @storacha/cli
+storacha login                 # email login, then create/select a space
+storacha key create            # -> STORACHA_PRINCIPAL (the base64 key)
+storacha delegation create <did-from-key-create> \
+  -c space/blob/add -c space/index/add -c filecoin/offer -c upload/add \
+  --base64                     # -> STORACHA_PROOF
+```
+
 ## License
 
 [MIT](./LICENSE)
