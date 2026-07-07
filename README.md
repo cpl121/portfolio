@@ -63,7 +63,9 @@ fallback), and is served at [cpl121.eth.limo](https://cpl121.eth.limo) — the
 - **Deploy** (`.github/workflows/deploy.yml`) runs after CI passes on `main`
   (or manually via _Run workflow_): it builds, verifies, then pins `build/` to
   public IPFS with [Pinata](https://pinata.cloud) via `scripts/pin-to-ipfs.mjs`
-  and prints the resulting **CID** in the job summary.
+  and prints the resulting **CID** in the job summary. The script also prunes
+  older deploys (keeping the 3 most recent, `PINATA_KEEP` to change) so the
+  repo stays comfortably inside Pinata's free tier.
 - **Publish:** set the `contenthash` of `cpl121.eth` to `ipfs://<CID>` at
   [app.ens.domains](https://app.ens.domains/cpl121.eth) (one signed transaction).
   Using an immutable CID — rather than IPNS — means the site never depends on a
@@ -71,7 +73,8 @@ fallback), and is served at [cpl121.eth.limo](https://cpl121.eth.limo) — the
 
 One-time setup — add a single repository secret:
 
-- `PINATA_JWT` — create a free account at [pinata.cloud](https://pinata.cloud),
+- `PINATA_JWT` — create a free account at [pinata.cloud](https://pinata.cloud)
+  (free tier: 1 GB / 500 files, no card required — the ~2 MB build fits easily),
   then **API Keys → New Key** with the `pinFileToIPFS` scope and copy the JWT.
 
 The same script can be run locally to publish an ad-hoc build:

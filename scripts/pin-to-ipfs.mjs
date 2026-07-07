@@ -29,6 +29,8 @@ async function walk(d) {
 }
 
 const root = basename(dir); // single top-level dir -> becomes the CID root
+const pinName = `portfolio-${root}`; // metadata tag used to find & prune old pins
+const keep = Number(process.env.PINATA_KEEP ?? 3); // how many recent pins to retain
 const files = await walk(dir);
 
 if (files.length === 0) {
@@ -44,7 +46,7 @@ for (const file of files) {
 }
 // CIDv1 (base32) is the modern, gateway- and ENS-friendly form.
 form.append('pinataOptions', JSON.stringify({ cidVersion: 1 }));
-form.append('pinataMetadata', JSON.stringify({ name: `portfolio-${root}` }));
+form.append('pinataMetadata', JSON.stringify({ name: pinName }));
 
 console.error(`Pinning ${files.length} files from ${dir}/ to Pinata…`);
 const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
@@ -88,4 +90,33 @@ if (!reachable) {
 }
 
 console.error(`Pinned OK — index.html reachable at ${probe}`);
+
+// Prune old deploys to stay within Pinata's free tier. Keep the `keep` most
+// recent pins (current + a couple of previous ones, so whatever the ENS record
+// currently points to stays available while you switch it over). Best-effort:
+// a failure here never fails the deploy — the new pin is already live.
+try {
+	const list = await fetch(
+		`https://api.pinata.cloud/data/pinList?status=pinned&metadata[name]=${encodeURIComponent(pinName)}&pageLimit=1000`,
+		{ headers: { Authorization: `Bearer ${jwt}` } }
+	);
+	const { rows = [] } = await list.json();
+	const stale = rows
+		.filter((row) => row.metadata?.name === pinName)
+		.sort((a, b) => new Date(b.date_pinned) - new Date(a.date_pinned))
+		.slice(keep) // everything older than the `keep` most recent
+		.filter((row) => row.ipfs_pin_hash !== cid);
+
+	for (const row of stale) {
+		const del = await fetch(`https://api.pinata.cloud/pinning/unpin/${row.ipfs_pin_hash}`, {
+			method: 'DELETE',
+			headers: { Authorization: `Bearer ${jwt}` }
+		});
+		console.error(`${del.ok ? 'Unpinned' : 'Failed to unpin'} old build ${row.ipfs_pin_hash}`);
+	}
+} catch (error) {
+	console.error('Skipped pruning old pins:', error.message);
+}
+
+// CID on the last stdout line for the workflow to capture.
 console.log(cid);
