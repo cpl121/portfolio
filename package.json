@@ -28,7 +28,7 @@
 		"verify:build": "node scripts/verify-build.mjs"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.17.0",
+		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.61.1",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.20.6",
