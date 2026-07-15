@@ -76,7 +76,7 @@ jobs:
             echo ''
             echo '**Preview via gateway:**'
             echo "- https://$CID.ipfs.dweb.link/"
-            echo "- https://gateway.pinata.cloud/ipfs/$CID/"
+            echo "- https://ipfs.io/ipfs/$CID/"
             echo ''
             echo '### Publish this build'
             echo 'Set the `contenthash` of **cpl121.eth** to the value below at'
