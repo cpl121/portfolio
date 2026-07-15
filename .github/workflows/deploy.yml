@@ -18,14 +18,33 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
-    # Deploy only when CI succeeded on main, or on a manual run.
+  # Skip the deploy cleanly (green, not red) until PINATA_JWT is configured,
+  # so an unconfigured repo doesn't fail on every push to main.
+  guard:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
     steps:
-      - uses: actions/checkout@v4
+      - id: check
+        env:
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        run: |
+          if [ -n "$PINATA_JWT" ]; then
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'enabled=false' >> "$GITHUB_OUTPUT"
+            echo '⏭️ Skipped: add a `PINATA_JWT` repository secret (Settings → Secrets and variables → Actions) to enable IPFS deploys.' >> "$GITHUB_STEP_SUMMARY"
+          fi
 
-      - uses: actions/setup-node@v4
+  deploy:
+    needs: guard
+    if: needs.guard.outputs.enabled == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
