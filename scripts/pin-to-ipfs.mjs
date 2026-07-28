@@ -30,7 +30,10 @@ async function walk(d) {
 
 const root = basename(dir); // single top-level dir -> becomes the CID root
 const pinName = `portfolio-${root}`; // metadata tag used to find & prune old pins
-const keep = Number(process.env.PINATA_KEEP ?? 3); // how many recent pins to retain
+// How many recent pins to retain. Must comfortably exceed the number of deploys
+// between ENS publishes: the CID sitting in the cpl121.eth contenthash has to
+// stay pinned, or the site 504s the way it did when Fleek stopped republishing.
+const keep = Number(process.env.PINATA_KEEP ?? 20);
 const files = await walk(dir);
 
 if (files.length === 0) {
