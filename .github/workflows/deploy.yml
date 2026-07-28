@@ -1,14 +1,12 @@
 name: Deploy to IPFS
 
-# Publishes the prerendered site to IPFS (via Storacha) once CI passes on main.
-# The CID printed in the job summary goes into the ENS contenthash of
+# Publishes the prerendered site to public IPFS (via Pinata) once CI passes on
+# main. The CID printed in the job summary goes into the ENS contenthash of
 # cpl121.eth as `ipfs://<CID>`, and eth.limo serves it at cpl121.eth.limo.
 #
-# Requires two repository secrets (generated once with the `storacha` CLI):
-#   STORACHA_PRINCIPAL  -> `storacha key create` (the base64 signing key)
-#   STORACHA_PROOF      -> `storacha delegation create <did> \
-#                            -c space/blob/add -c space/index/add \
-#                            -c filecoin/offer -c upload/add --base64`
+# Requires one repository secret:
+#   PINATA_JWT  -> a Pinata API key JWT with the pinFileToIPFS scope
+#                  (https://app.pinata.cloud -> API Keys -> New Key).
 on:
   workflow_run:
     workflows: ['CI']
@@ -20,14 +18,33 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
-    # Deploy only when CI succeeded on main, or on a manual run.
+  # Skip the deploy cleanly (green, not red) until PINATA_JWT is configured,
+  # so an unconfigured repo doesn't fail on every push to main.
+  guard:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
     steps:
-      - uses: actions/checkout@v4
+      - id: check
+        env:
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        run: |
+          if [ -n "$PINATA_JWT" ]; then
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'enabled=false' >> "$GITHUB_OUTPUT"
+            echo '⏭️ Skipped: add a `PINATA_JWT` repository secret (Settings → Secrets and variables → Actions) to enable IPFS deploys.' >> "$GITHUB_STEP_SUMMARY"
+          fi
 
-      - uses: actions/setup-node@v4
+  deploy:
+    needs: guard
+    if: needs.guard.outputs.enabled == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: npm
@@ -41,13 +58,13 @@ jobs:
       - name: Verify build (confidentiality + sitemap)
         run: npm run verify:build
 
-      - name: Pin to IPFS (Storacha)
+      - name: Pin to IPFS (Pinata)
         id: ipfs
-        uses: storacha/add-to-web3@v4
-        with:
-          path_to_add: build
-          secret_key: ${{ secrets.STORACHA_PRINCIPAL }}
-          proof: ${{ secrets.STORACHA_PROOF }}
+        env:
+          PINATA_JWT: ${{ secrets.PINATA_JWT }}
+        run: |
+          CID="$(node scripts/pin-to-ipfs.mjs build | tail -n1)"
+          echo "cid=$CID" >> "$GITHUB_OUTPUT"
 
       - name: Publish CID to job summary
         run: |
@@ -59,7 +76,7 @@ jobs:
             echo ''
             echo '**Preview via gateway:**'
             echo "- https://$CID.ipfs.dweb.link/"
-            echo "- ${{ steps.ipfs.outputs.url }}"
+            echo "- https://ipfs.io/ipfs/$CID/"
             echo ''
             echo '### Publish this build'
             echo 'Set the `contenthash` of **cpl121.eth** to the value below at'

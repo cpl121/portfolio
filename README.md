@@ -61,23 +61,27 @@ fallback), and is served at [cpl121.eth.limo](https://cpl121.eth.limo) — the
 - **CI** (`.github/workflows/ci.yml`) runs the quality gate on every push/PR:
   audit, lint, type-check, unit tests, build, `verify:build` and E2E smoke tests.
 - **Deploy** (`.github/workflows/deploy.yml`) runs after CI passes on `main`
-  (or manually via _Run workflow_): it builds, verifies, pins `build/` to IPFS
-  with [`storacha/add-to-web3`](https://github.com/storacha/add-to-web3), and
-  prints the resulting **CID** in the job summary.
+  (or manually via _Run workflow_): it builds, verifies, then pins `build/` to
+  public IPFS with [Pinata](https://pinata.cloud) via `scripts/pin-to-ipfs.mjs`
+  and prints the resulting **CID** in the job summary. The script also prunes
+  older deploys (keeping the 3 most recent, `PINATA_KEEP` to change) so the
+  repo stays comfortably inside Pinata's free tier.
 - **Publish:** set the `contenthash` of `cpl121.eth` to `ipfs://<CID>` at
   [app.ens.domains](https://app.ens.domains/cpl121.eth) (one signed transaction).
   Using an immutable CID — rather than IPNS — means the site never depends on a
   record being continuously republished.
 
-One-time setup — add two repository secrets generated with the `storacha` CLI:
+One-time setup — add a single repository secret:
+
+- `PINATA_JWT` — create a free account at [pinata.cloud](https://pinata.cloud)
+  (free tier: 1 GB / 500 files, no card required — the ~2 MB build fits easily),
+  then **API Keys → New Key** with the `pinFileToIPFS` scope and copy the JWT.
+
+The same script can be run locally to publish an ad-hoc build:
 
 ```bash
-npm i -g @storacha/cli
-storacha login                 # email login, then create/select a space
-storacha key create            # -> STORACHA_PRINCIPAL (the base64 key)
-storacha delegation create <did-from-key-create> \
-  -c space/blob/add -c space/index/add -c filecoin/offer -c upload/add \
-  --base64                     # -> STORACHA_PROOF
+npm run build
+PINATA_JWT=<jwt> node scripts/pin-to-ipfs.mjs build   # prints the CID
 ```
 
 ## License
